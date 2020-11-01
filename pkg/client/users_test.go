@@ -4,22 +4,25 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/asankov/gira/pkg/models"
+	"github.com/asankov/gira/pkg/client"
 
 	"github.com/asankov/gira/internal/fixtures"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 var (
-	user = &models.User{
+	user = &client.User{
 		ID:       "123",
 		Username: "test_user",
 		Email:    "test@mail.com",
 	}
-	userResponse = &models.UserResponse{
+	userResponse = struct {
+		User *client.User `json:"user"`
+	}{
 		User: user,
 	}
-	userLoginResponse = &models.UserLoginResponse{
+	userLoginResponse = &client.UserLoginResponse{
 		Token: token,
 	}
 )
@@ -34,9 +37,11 @@ func TestGetUser(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	usr, err := cl.GetUser(token)
+	resp, err := cl.GetUser(&client.GetUserRequest{Token: token})
 	require.NoError(t, err)
-	require.Equal(t, usr, user)
+	assert.Equal(t, resp.Email, user.Email)
+	assert.Equal(t, resp.ID, user.ID)
+	assert.Equal(t, resp.Username, user.Username)
 }
 
 func TestCreateUser(t *testing.T) {
@@ -49,9 +54,15 @@ func TestCreateUser(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	usr, err := cl.CreateUser(user)
+	resp, err := cl.CreateUser(&client.CreateUserRequest{
+		Username: user.Username,
+		Email:    user.Email,
+		Password: user.Password,
+	})
 	require.NoError(t, err)
-	require.Equal(t, usr, user)
+	assert.Equal(t, resp.Email, user.Email)
+	assert.Equal(t, resp.ID, user.ID)
+	assert.Equal(t, resp.Username, user.Username)
 }
 
 func TestLogin(t *testing.T) {
@@ -64,9 +75,13 @@ func TestLogin(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	usrLoginResponse, err := cl.LoginUser(user)
+	resp, err := cl.LoginUser(&client.LoginUserRequest{
+		Username: user.Username,
+		Email:    user.Email,
+		Password: user.Password,
+	})
 	require.NoError(t, err)
-	require.Equal(t, usrLoginResponse, userLoginResponse)
+	require.Equal(t, resp, userLoginResponse)
 }
 
 func TestLogout(t *testing.T) {
@@ -79,6 +94,8 @@ func TestLogout(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	err := cl.LogoutUser(token)
+	err := cl.LogoutUser(&client.LogoutUserRequest{
+		Token: token,
+	})
 	require.NoError(t, err)
 }

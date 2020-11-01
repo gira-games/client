@@ -17,21 +17,41 @@ var (
 	ErrCreatingFranchise = errors.New("error while creating franchise")
 )
 
+// Franchise is the struct that represents a franchise
+type Franchise struct {
+	ID   string `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+// CreateFranchiseRequest is used when the consumer wants to create a franchise
 type CreateFranchiseRequest struct {
-	Name string `json:"name"`
+	Name  string
+	Token string
 }
 
+// CreateFranchiseResponse is the response that is returned from CreateFranchise
 type CreateFranchiseResponse struct {
-	Franchise *models.Franchise
+	Franchise *Franchise
 }
 
-func (c *Client) GetFranchises(token string) ([]*models.Franchise, error) {
+// GetFranchisesRequest is used when the consumer wants to get all franchises
+type GetFranchisesRequest struct {
+	Token string
+}
+
+// GetFranchisesResponse is the response that is returned from GetFranchises
+type GetFranchisesResponse struct {
+	Franchises []*Franchise `json:"franchises,omitempty"`
+}
+
+// GetFranchises returns all the franchises
+func (c *Client) GetFranchises(request *GetFranchisesRequest) (*GetFranchisesResponse, error) {
 	url := fmt.Sprintf("%s/franchises", c.addr)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error while building HTTP request")
 	}
-	req.Header.Add(models.XAuthToken, token)
+	req.Header.Add(xAuthToken, request.Token)
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, ErrFetchingFranchises
@@ -43,15 +63,16 @@ func (c *Client) GetFranchises(token string) ([]*models.Franchise, error) {
 		return nil, ErrFetchingFranchises
 	}
 
-	var franchises models.FranchisesResponse
-	if err := json.NewDecoder(res.Body).Decode(&franchises); err != nil {
+	var franchisesResponse GetFranchisesResponse
+	if err := json.NewDecoder(res.Body).Decode(&franchisesResponse); err != nil {
 		return nil, fmt.Errorf("error while decoding body: %w", err)
 	}
 
-	return franchises.Franchises, nil
+	return &franchisesResponse, nil
 }
 
-func (c *Client) CreateFranchise(req *CreateFranchiseRequest, token string) (*CreateFranchiseResponse, error) {
+// CreateFranchise creates a franchise
+func (c *Client) CreateFranchise(req *CreateFranchiseRequest) (*CreateFranchiseResponse, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, ErrCreatingFranchise
@@ -61,7 +82,7 @@ func (c *Client) CreateFranchise(req *CreateFranchiseRequest, token string) (*Cr
 	if err != nil {
 		return nil, fmt.Errorf("error while building HTTP request")
 	}
-	request.Header.Add(models.XAuthToken, token)
+	request.Header.Add(models.XAuthToken, req.Token)
 	res, err := c.httpClient.Do(request)
 	if err != nil {
 		return nil, ErrCreatingFranchise
@@ -80,7 +101,7 @@ func (c *Client) CreateFranchise(req *CreateFranchiseRequest, token string) (*Cr
 		return nil, ErrCreatingFranchise
 	}
 
-	var franchise models.Franchise
+	var franchise Franchise
 	if err := json.NewDecoder(res.Body).Decode(&franchise); err != nil {
 		return nil, fmt.Errorf("error while decoding body: %w", err)
 	}

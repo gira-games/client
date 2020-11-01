@@ -6,17 +6,16 @@ import (
 
 	"github.com/asankov/gira/internal/fixtures"
 	"github.com/asankov/gira/pkg/client"
-	"github.com/asankov/gira/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
 var (
-	franchise = &models.Franchise{
+	franchise = &client.Franchise{
 		ID:   "1",
 		Name: "Batman",
 	}
-	franchises         = []*models.Franchise{franchise}
-	franchisesResponse = &models.FranchisesResponse{
+	franchises         = []*client.Franchise{franchise}
+	franchisesResponse = &client.GetFranchisesResponse{
 		Franchises: franchises,
 	}
 )
@@ -32,9 +31,9 @@ func TestFranchisesGet(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	fr, err := cl.GetFranchises(token)
+	resp, err := cl.GetFranchises(&client.GetFranchisesRequest{Token: token})
 	require.NoError(t, err)
-	require.Equal(t, franchises, fr)
+	require.Equal(t, franchises, resp.Franchises)
 }
 
 func TestFranchisesCreate(t *testing.T) {
@@ -49,8 +48,9 @@ func TestFranchisesCreate(t *testing.T) {
 	cl := newClient(t, ts.URL)
 
 	frResponse, err := cl.CreateFranchise(&client.CreateFranchiseRequest{
-		Name: "AC",
-	}, token)
+		Name:  "AC",
+		Token: token,
+	})
 	require.NoError(t, err)
 	require.Equal(t, franchise, frResponse.Franchise)
 }
