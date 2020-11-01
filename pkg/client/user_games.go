@@ -58,7 +58,7 @@ func (c *Client) GetUserGames(request *GetUserGamesRequest) (*GetUserGamesRespon
 	if err != nil {
 		return nil, fmt.Errorf("error while building HTTP request")
 	}
-	req.Header.Add(xAuthToken, request.Token)
+	req.Header.Add(XAuthToken, request.Token)
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, ErrFetchingGames
@@ -98,7 +98,7 @@ func (c *Client) LinkGameToUser(request *LinkGameToUserRequest) error {
 	if err != nil {
 		return fmt.Errorf("error while building HTTP request")
 	}
-	req.Header.Add(xAuthToken, request.Token)
+	req.Header.Add(XAuthToken, request.Token)
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return ErrLinkingGame
@@ -123,7 +123,7 @@ func (c *Client) UpdateGameProgress(request *UpdateGameProgressRequest) error {
 	if err != nil {
 		return fmt.Errorf("error while building HTTP request")
 	}
-	req.Header.Add(xAuthToken, request.Token)
+	req.Header.Add(XAuthToken, request.Token)
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return err
@@ -143,7 +143,7 @@ func (c *Client) DeleteUserGame(request *DeleteUserGameRequest) error {
 	if err != nil {
 		return fmt.Errorf("error while building HTTP request")
 	}
-	req.Header.Add(xAuthToken, request.Token)
+	req.Header.Add(XAuthToken, request.Token)
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return err

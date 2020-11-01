@@ -70,7 +70,7 @@ func (c *Client) GetUser(request *GetUserRequest) (*GetUserResponse, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error while building request")
 	}
-	req.Header.Set(xAuthToken, request.Token)
+	req.Header.Set(XAuthToken, request.Token)
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error while calling %s: %w", url, err)
@@ -139,7 +139,7 @@ func (c *Client) LogoutUser(request *LogoutUserRequest) error {
 	if err != nil {
 		return fmt.Errorf("error while building request")
 	}
-	req.Header.Set(xAuthToken, request.Token)
+	req.Header.Set(XAuthToken, request.Token)
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return fmt.Errorf("error while calling %s: %w", url, err)

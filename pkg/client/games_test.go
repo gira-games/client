@@ -1,10 +1,9 @@
 package client_test
 
 import (
+	"errors"
 	"net/http"
 	"testing"
-
-	gassert "github.com/asankov/gira/internal/fixtures/assert"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -98,7 +97,7 @@ func TestGetGamesHTTPError(t *testing.T) {
 
 			games, err := cl.GetGames(&client.GetGamesRequest{Token: token})
 			assert.Nil(t, games)
-			gassert.Error(t, err, testCase.expectedErr)
+			assert.True(t, errors.Is(err, testCase.expectedErr))
 		})
 	}
 }
@@ -154,7 +153,7 @@ func TestCreateGameHTTPError(t *testing.T) {
 
 			createdGame, err := cl.CreateGame(&client.CreateGameRequest{Token: token, Game: game})
 			assert.Nil(t, createdGame)
-			gassert.Error(t, err, testCase.expectedErr)
+			assert.True(t, errors.Is(err, testCase.expectedErr))
 		})
 	}
 }

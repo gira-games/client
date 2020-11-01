@@ -63,7 +63,7 @@ func (c *Client) GetGames(request *GetGamesRequest) (*GetGamesResponse, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error while building HTTP request")
 	}
-	req.Header.Add(xAuthToken, request.Token)
+	req.Header.Add(XAuthToken, request.Token)
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, ErrFetchingGames
@@ -93,7 +93,7 @@ func (c *Client) CreateGame(request *CreateGameRequest) (*CreateGameResponse, er
 	if err != nil {
 		return nil, fmt.Errorf("error while building HTTP request")
 	}
-	req.Header.Add(xAuthToken, request.Token)
+	req.Header.Add(XAuthToken, request.Token)
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, ErrCreatingGame

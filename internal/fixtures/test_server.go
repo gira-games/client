@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	models "github.com/asankov/gira/pkg/models"
+	"github.com/asankov/gira/pkg/client"
 )
 
 type ServerBuilder struct {
@@ -64,7 +64,7 @@ func (s ServerBuilder) Build() *httptest.Server {
 			return
 		}
 		if s.token != "" {
-			if r.Header.Get(models.XAuthToken) != s.token {
+			if r.Header.Get(client.XAuthToken) != s.token {
 				w.WriteHeader(http.StatusBadRequest)
 				return
 			}

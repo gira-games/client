@@ -6,8 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-
-	"github.com/asankov/gira/pkg/models"
 )
 
 var (
@@ -51,7 +49,7 @@ func (c *Client) GetFranchises(request *GetFranchisesRequest) (*GetFranchisesRes
 	if err != nil {
 		return nil, fmt.Errorf("error while building HTTP request")
 	}
-	req.Header.Add(xAuthToken, request.Token)
+	req.Header.Add(XAuthToken, request.Token)
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, ErrFetchingFranchises
@@ -82,7 +80,7 @@ func (c *Client) CreateFranchise(req *CreateFranchiseRequest) (*CreateFranchiseR
 	if err != nil {
 		return nil, fmt.Errorf("error while building HTTP request")
 	}
-	request.Header.Add(models.XAuthToken, req.Token)
+	request.Header.Add(XAuthToken, req.Token)
 	res, err := c.httpClient.Do(request)
 	if err != nil {
 		return nil, ErrCreatingFranchise
@@ -91,14 +89,16 @@ func (c *Client) CreateFranchise(req *CreateFranchiseRequest) (*CreateFranchiseR
 		if res.StatusCode == http.StatusUnauthorized {
 			return nil, ErrNoAuthorization
 		}
-		if res.StatusCode == http.StatusBadRequest {
-			var jsonErr models.ErrorResponse
-			if err := json.NewDecoder(res.Body).Decode(&jsonErr); err != nil {
-				return nil, ErrCreatingFranchise
-			}
-			return nil, errors.New(jsonErr.Error)
-		}
-		return nil, ErrCreatingFranchise
+		// TODO:
+
+		// if res.StatusCode == http.StatusBadRequest {
+		// 	var jsonErr models.ErrorResponse
+		// 	if err := json.NewDecoder(res.Body).Decode(&jsonErr); err != nil {
+		// 		return nil, ErrCreatingFranchise
+		// 	}
+		// 	return nil, errors.New(jsonErr.Error)
+		// }
+		// return nil, ErrCreatingFranchise
 	}
 
 	var franchise Franchise

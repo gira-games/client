@@ -2,7 +2,8 @@ package client
 
 import "net/http"
 
-var xAuthToken = "x-auth-token"
+// XAuthToken is the name of the header used for authentication
+var XAuthToken = "x-auth-token"
 
 // Client is the struct that is used to communicate
 // with the games service.
