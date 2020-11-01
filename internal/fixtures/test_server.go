@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/asankov/gira/pkg/client"
+	"github.com/gira-games/client/pkg/client"
 )
 
 type ServerBuilder struct {

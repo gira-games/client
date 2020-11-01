@@ -4,8 +4,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/asankov/gira/internal/fixtures"
-	"github.com/asankov/gira/pkg/client"
+	"github.com/gira-games/client/internal/fixtures"
+
+	"github.com/gira-games/client/pkg/client"
+
 	"github.com/stretchr/testify/require"
 )
 
