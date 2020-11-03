@@ -27,7 +27,7 @@ var (
 type Game struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
-	FranshiseID string `json:"franchiseId"`
+	FranchiseID string `json:"franchiseId"`
 }
 
 // GetGamesRequest is used when the consumer wants to get all games

@@ -118,7 +118,7 @@ func TestCreateGame(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, game.ID, res.Game.ID)
 	assert.Equal(t, game.Name, res.Game.Name)
-	assert.Empty(t, res.Game.FranshiseID)
+	assert.Empty(t, res.Game.FranchiseID)
 }
 
 func TestCreateGameHTTPError(t *testing.T) {
