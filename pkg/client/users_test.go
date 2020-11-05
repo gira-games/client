@@ -1,6 +1,7 @@
 package client_test
 
 import (
+	"context"
 	"net/http"
 	"testing"
 
@@ -36,7 +37,7 @@ func TestGetUser(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	resp, err := cl.GetUser(&client.GetUserRequest{Token: token})
+	resp, err := cl.GetUser(context.Background(), &client.GetUserRequest{Token: token})
 	require.NoError(t, err)
 	assert.Equal(t, resp.Email, user.Email)
 	assert.Equal(t, resp.ID, user.ID)
@@ -53,7 +54,7 @@ func TestCreateUser(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	resp, err := cl.CreateUser(&client.CreateUserRequest{
+	resp, err := cl.CreateUser(context.Background(), &client.CreateUserRequest{
 		Username: user.Username,
 		Email:    user.Email,
 		Password: user.Password,
@@ -74,7 +75,7 @@ func TestLogin(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	resp, err := cl.LoginUser(&client.LoginUserRequest{
+	resp, err := cl.LoginUser(context.Background(), &client.LoginUserRequest{
 		Username: user.Username,
 		Email:    user.Email,
 		Password: user.Password,
@@ -93,7 +94,7 @@ func TestLogout(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	err := cl.LogoutUser(&client.LogoutUserRequest{
+	err := cl.LogoutUser(context.Background(), &client.LogoutUserRequest{
 		Token: token,
 	})
 	require.NoError(t, err)

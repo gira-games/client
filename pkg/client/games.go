@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -54,7 +55,7 @@ type CreateGameResponse struct {
 
 // GetGames returns all the games or all the games that are not assigned to the user
 // to whom the token belongs.
-func (c *Client) GetGames(request *GetGamesRequest) (*GetGamesResponse, error) {
+func (c *Client) GetGames(ctx context.Context, request *GetGamesRequest) (*GetGamesResponse, error) {
 	url := fmt.Sprintf("%s/games", c.addr)
 	if request.ExcludeAssigned {
 		url += "?excludeAssigned=true"
@@ -84,7 +85,7 @@ func (c *Client) GetGames(request *GetGamesRequest) (*GetGamesResponse, error) {
 }
 
 // CreateGame creates a new game from the passed model.
-func (c *Client) CreateGame(request *CreateGameRequest) (*CreateGameResponse, error) {
+func (c *Client) CreateGame(ctx context.Context, request *CreateGameRequest) (*CreateGameResponse, error) {
 	body, err := json.Marshal(request.Game)
 	if err != nil {
 		return nil, ErrCreatingGame
