@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -53,7 +54,7 @@ type DeleteUserGameRequest struct {
 }
 
 // GetUserGames returns all the games for the given user.
-func (c *Client) GetUserGames(request *GetUserGamesRequest) (*GetUserGamesResponse, error) {
+func (c *Client) GetUserGames(ctx context.Context, request *GetUserGamesRequest) (*GetUserGamesResponse, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/users/games", c.addr), nil)
 	if err != nil {
 		return nil, fmt.Errorf("error while building HTTP request")
@@ -79,7 +80,7 @@ func (c *Client) GetUserGames(request *GetUserGamesRequest) (*GetUserGamesRespon
 }
 
 // LinkGameToUser adds the game with the given ID to the list of games of the user, associated with the token
-func (c *Client) LinkGameToUser(request *LinkGameToUserRequest) error {
+func (c *Client) LinkGameToUser(ctx context.Context, request *LinkGameToUserRequest) error {
 	body, err := json.Marshal(struct {
 		Game struct {
 			ID string `json:"id"`
@@ -113,7 +114,7 @@ func (c *Client) LinkGameToUser(request *LinkGameToUserRequest) error {
 	return nil
 }
 
-func (c *Client) UpdateGameProgress(request *UpdateGameProgressRequest) error {
+func (c *Client) UpdateGameProgress(ctx context.Context, request *UpdateGameProgressRequest) error {
 	body, err := json.Marshal(request.Update)
 	if err != nil {
 		return fmt.Errorf("error while marshalling body: %w", err)
@@ -138,7 +139,7 @@ func (c *Client) UpdateGameProgress(request *UpdateGameProgressRequest) error {
 	return nil
 }
 
-func (c *Client) DeleteUserGame(request *DeleteUserGameRequest) error {
+func (c *Client) DeleteUserGame(ctx context.Context, request *DeleteUserGameRequest) error {
 	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/users/games/%s", c.addr, request.GameID), nil)
 	if err != nil {
 		return fmt.Errorf("error while building HTTP request")

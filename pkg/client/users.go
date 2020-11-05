@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -64,7 +65,7 @@ func (e *ErrorResponse) Error() string {
 	return e.Err
 }
 
-func (c *Client) GetUser(request *GetUserRequest) (*GetUserResponse, error) {
+func (c *Client) GetUser(ctx context.Context, request *GetUserRequest) (*GetUserResponse, error) {
 	url := fmt.Sprintf("%s/users", c.addr)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -88,7 +89,7 @@ func (c *Client) GetUser(request *GetUserRequest) (*GetUserResponse, error) {
 	return userResponse.User, nil
 }
 
-func (c *Client) CreateUser(request *CreateUserRequest) (*CreateUserResponse, error) {
+func (c *Client) CreateUser(ctx context.Context, request *CreateUserRequest) (*CreateUserResponse, error) {
 	body, err := json.Marshal(request)
 	if err != nil {
 		return nil, fmt.Errorf("error while building body: %w", err)
@@ -111,7 +112,7 @@ func (c *Client) CreateUser(request *CreateUserRequest) (*CreateUserResponse, er
 	return userResponse, nil
 }
 
-func (c *Client) LoginUser(request *LoginUserRequest) (*UserLoginResponse, error) {
+func (c *Client) LoginUser(ctx context.Context, request *LoginUserRequest) (*UserLoginResponse, error) {
 	body, err := json.Marshal(request)
 	if err != nil {
 		return nil, fmt.Errorf("error while building body: %w", err)
@@ -133,7 +134,7 @@ func (c *Client) LoginUser(request *LoginUserRequest) (*UserLoginResponse, error
 	return userResponse, nil
 }
 
-func (c *Client) LogoutUser(request *LogoutUserRequest) error {
+func (c *Client) LogoutUser(ctx context.Context, request *LogoutUserRequest) error {
 	url := fmt.Sprintf("%s/users/logout", c.addr)
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {

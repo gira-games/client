@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -43,7 +44,7 @@ type GetFranchisesResponse struct {
 }
 
 // GetFranchises returns all the franchises
-func (c *Client) GetFranchises(request *GetFranchisesRequest) (*GetFranchisesResponse, error) {
+func (c *Client) GetFranchises(ctx context.Context, request *GetFranchisesRequest) (*GetFranchisesResponse, error) {
 	url := fmt.Sprintf("%s/franchises", c.addr)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -70,7 +71,7 @@ func (c *Client) GetFranchises(request *GetFranchisesRequest) (*GetFranchisesRes
 }
 
 // CreateFranchise creates a franchise
-func (c *Client) CreateFranchise(req *CreateFranchiseRequest) (*CreateFranchiseResponse, error) {
+func (c *Client) CreateFranchise(ctx context.Context, req *CreateFranchiseRequest) (*CreateFranchiseResponse, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, ErrCreatingFranchise

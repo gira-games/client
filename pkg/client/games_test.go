@@ -1,6 +1,7 @@
 package client_test
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"testing"
@@ -39,7 +40,7 @@ func TestGetGames(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	games, err := cl.GetGames(&client.GetGamesRequest{Token: token})
+	games, err := cl.GetGames(context.Background(), &client.GetGamesRequest{Token: token})
 
 	require.NoError(t, err)
 	require.Equal(t, 1, len(games.Games))
@@ -58,7 +59,7 @@ func TestGetGamesExcludeAssigned(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	games, err := cl.GetGames(&client.GetGamesRequest{Token: token, ExcludeAssigned: true})
+	games, err := cl.GetGames(context.Background(), &client.GetGamesRequest{Token: token, ExcludeAssigned: true})
 
 	require.NoError(t, err)
 	require.Equal(t, 1, len(games.Games))
@@ -94,7 +95,7 @@ func TestGetGamesHTTPError(t *testing.T) {
 			cl, err := client.New(ts.URL)
 			require.NoError(t, err)
 
-			games, err := cl.GetGames(&client.GetGamesRequest{Token: token})
+			games, err := cl.GetGames(context.Background(), &client.GetGamesRequest{Token: token})
 			assert.Nil(t, games)
 			assert.True(t, errors.Is(err, testCase.expectedErr))
 		})
@@ -113,7 +114,7 @@ func TestCreateGame(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	res, err := cl.CreateGame(&client.CreateGameRequest{Token: token, Game: game})
+	res, err := cl.CreateGame(context.Background(), &client.CreateGameRequest{Token: token, Game: game})
 
 	require.NoError(t, err)
 	assert.Equal(t, game.ID, res.Game.ID)
@@ -150,7 +151,7 @@ func TestCreateGameHTTPError(t *testing.T) {
 			cl, err := client.New(ts.URL)
 			require.NoError(t, err)
 
-			createdGame, err := cl.CreateGame(&client.CreateGameRequest{Token: token, Game: game})
+			createdGame, err := cl.CreateGame(context.Background(), &client.CreateGameRequest{Token: token, Game: game})
 			assert.Nil(t, createdGame)
 			assert.True(t, errors.Is(err, testCase.expectedErr))
 		})

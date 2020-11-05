@@ -1,6 +1,7 @@
 package client_test
 
 import (
+	"context"
 	"net/http"
 	"testing"
 
@@ -33,7 +34,7 @@ func TestFranchisesGet(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	resp, err := cl.GetFranchises(&client.GetFranchisesRequest{Token: token})
+	resp, err := cl.GetFranchises(context.Background(), &client.GetFranchisesRequest{Token: token})
 	require.NoError(t, err)
 	require.Equal(t, franchises, resp.Franchises)
 }
@@ -49,7 +50,7 @@ func TestFranchisesCreate(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	frResponse, err := cl.CreateFranchise(&client.CreateFranchiseRequest{
+	frResponse, err := cl.CreateFranchise(context.Background(), &client.CreateFranchiseRequest{
 		Name:  "AC",
 		Token: token,
 	})

@@ -1,6 +1,7 @@
 package client_test
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -49,7 +50,7 @@ func TestGetUserGames(t *testing.T) {
 	defer ts.Close()
 
 	cl := newClient(t, ts.URL)
-	resp, err := cl.GetUserGames(&client.GetUserGamesRequest{Token: token})
+	resp, err := cl.GetUserGames(context.Background(), &client.GetUserGamesRequest{Token: token})
 	assert.NoError(t, err)
 	assert.True(t, cmp.Equal(resp.UserGames, usersGameResponse))
 }
@@ -82,7 +83,7 @@ func TestGetUserGameHTTPError(t *testing.T) {
 			defer ts.Close()
 
 			cl := newClient(t, ts.URL)
-			_, err := cl.GetUserGames(&client.GetUserGamesRequest{Token: token})
+			_, err := cl.GetUserGames(context.Background(), &client.GetUserGamesRequest{Token: token})
 			assert.Error(t, err, testCase.expectedErr)
 		})
 	}
@@ -98,7 +99,7 @@ func TestLinkGameToUser(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	err := cl.LinkGameToUser(&client.LinkGameToUserRequest{
+	err := cl.LinkGameToUser(context.Background(), &client.LinkGameToUserRequest{
 		Token:  token,
 		GameID: "12",
 	})
@@ -134,7 +135,7 @@ func TestLinkGameToUserHTTPError(t *testing.T) {
 
 			cl := newClient(t, ts.URL)
 
-			err := cl.LinkGameToUser(&client.LinkGameToUserRequest{
+			err := cl.LinkGameToUser(context.Background(), &client.LinkGameToUserRequest{
 				Token:  token,
 				GameID: "12",
 			})
@@ -153,7 +154,7 @@ func TestChangeGameStatus(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	err := cl.UpdateGameProgress(&client.UpdateGameProgressRequest{
+	err := cl.UpdateGameProgress(context.Background(), &client.UpdateGameProgressRequest{
 		GameID: game.ID,
 		Token:  token,
 		Update: client.UpdateGameProgressChange{
@@ -192,7 +193,7 @@ func TestChangeGameStatusHTTPError(t *testing.T) {
 
 			cl := newClient(t, ts.URL)
 
-			err := cl.UpdateGameProgress(&client.UpdateGameProgressRequest{
+			err := cl.UpdateGameProgress(context.Background(), &client.UpdateGameProgressRequest{
 				GameID: game.ID,
 				Token:  token,
 				Update: client.UpdateGameProgressChange{
@@ -214,7 +215,7 @@ func TestChangeGameProgress(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	err := cl.UpdateGameProgress(&client.UpdateGameProgressRequest{
+	err := cl.UpdateGameProgress(context.Background(), &client.UpdateGameProgressRequest{
 		GameID: game.ID,
 		Token:  token,
 		Update: client.UpdateGameProgressChange{
@@ -238,7 +239,7 @@ func TestDeleteGame(t *testing.T) {
 
 	cl := newClient(t, ts.URL)
 
-	err := cl.DeleteUserGame(&client.DeleteUserGameRequest{Token: token, GameID: game.ID})
+	err := cl.DeleteUserGame(context.Background(), &client.DeleteUserGameRequest{Token: token, GameID: game.ID})
 	assert.NoError(t, err)
 }
 
@@ -271,7 +272,7 @@ func TestDeleteGameHTTPError(t *testing.T) {
 
 			cl := newClient(t, ts.URL)
 
-			err := cl.DeleteUserGame(&client.DeleteUserGameRequest{Token: token, GameID: game.ID})
+			err := cl.DeleteUserGame(context.Background(), &client.DeleteUserGameRequest{Token: token, GameID: game.ID})
 			assert.Error(t, err, testCase.expectedErr)
 		})
 	}
