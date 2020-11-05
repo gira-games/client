@@ -12,7 +12,7 @@ $ go get github.com/gira-games/client
 import "github.com/gira-games/client"
 
 cl := client.New("https://api.gira.com")
-resp, err := cl.GetGames(context.Background(), client.GetGamesRequest{
+resp, err := cl.GetGames(context.Background(), &client.GetGamesRequest{
     Token: "my-token"
 })
 // use resp and err
