@@ -123,7 +123,7 @@ func (c *Client) LoginUser(ctx context.Context, request *LoginUserRequest) (*Use
 		return nil, fmt.Errorf("error while calling %s: %w", url, err)
 	}
 	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("error response from server: %d - %s", res.StatusCode, parseErrorBody(res))
+		return nil, &ErrorResponse{Err: parseErrorBody(res)}
 	}
 
 	var userResponse *UserLoginResponse
