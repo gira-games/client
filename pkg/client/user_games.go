@@ -8,8 +8,6 @@ import (
 	"net/http"
 )
 
-type Status string
-
 // UserGame is the representation of a user game relation
 type UserGame struct {
 	ID       string            `json:"id,omitempty"`
